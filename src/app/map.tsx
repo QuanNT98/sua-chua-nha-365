@@ -1,7 +1,12 @@
 import { useMemo } from 'react';
-import { View, StyleSheet, Text as RNText } from 'react-native';
+import { View, StyleSheet, Text as RNText, Platform } from 'react-native';
+import Constants from 'expo-constants';
 import MapView, { Marker } from 'react-native-maps';
 import { Header, Screen } from '@/components/ui';
+import { MapCanvas } from '@/components/map';
+
+// Expo Go trên Android không có Google Maps key → dùng bản đồ vẽ tay
+const useMockMap = Platform.OS === 'android' && Constants.appOwnership === 'expo';
 
 /**
  * Khu vực làm việc – bám sát app gốc: header vàng + bản đồ thật full màn,
@@ -57,6 +62,9 @@ export default function MapScreen() {
   return (
     <Screen>
       <Header title="Khu vực làm việc" />
+      {useMockMap ? (
+        <MapCanvas variant="full" style={{ flex: 1 }} />
+      ) : (
       <MapView
         style={{ flex: 1 }}
         initialRegion={REGION}
@@ -72,6 +80,7 @@ export default function MapScreen() {
           </Marker>
         ))}
       </MapView>
+      )}
     </Screen>
   );
 }

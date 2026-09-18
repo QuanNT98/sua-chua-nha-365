@@ -36,6 +36,20 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "e13e3f5c-5b81-48d9-b45a-b2903b58eb71"
+      }
+    },
+    "owner": "quannguyen98",
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/e13e3f5c-5b81-48d9-b45a-b2903b58eb71",
+      "fallbackToCacheTimeout": 0
     }
   }
 }

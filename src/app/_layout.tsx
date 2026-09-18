@@ -5,6 +5,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useFonts, Quicksand_400Regular, Quicksand_500Medium, Quicksand_600SemiBold, Quicksand_700Bold } from '@expo-google-fonts/quicksand';
 import { useTheme } from '@/theme';
+import { DemoGate } from '@/components/demo-gate';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -20,12 +21,14 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <StatusBar style={t.isDark ? 'light' : 'dark'} />
+      <DemoGate>
       <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: t.bg }, animation: 'slide_from_right' }}>
         <Stack.Screen name="index" />
         <Stack.Screen name="login" options={{ animation: 'fade' }} />
         <Stack.Screen name="(tabs)" options={{ animation: 'fade' }} />
         <Stack.Screen name="booking/success" options={{ animation: 'fade', gestureEnabled: false }} />
       </Stack>
+      </DemoGate>
     </GestureHandlerRootView>
   );
 }
