@@ -1,56 +1,44 @@
-# Welcome to your Expo app 👋
+# Thợ Việt – Demo UI/UX (React Native / Expo)
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Bản clone giao diện app **Thợ Việt – Đặt Thợ Nhanh** (bám sát app gốc trên App Store,
+xem ảnh tham chiếu trong `reference/`). Không có backend: toàn bộ dữ liệu là mock trong `src/data`.
 
-## Get started
-
-1. Install dependencies
-
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+## Chạy
 
 ```bash
-npm run reset-project
+npm install
+npx expo start
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+- Nhấn `i` để mở iOS Simulator, `a` cho Android.
+- Hoặc quét QR bằng app **Expo Go** trên điện thoại thật (cùng Wi-Fi).
 
-### Other setup steps
+## Kịch bản demo
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+1. **Đăng nhập** SĐT → nhập 6 số OTP bất kỳ
+2. **Trang chủ**: chào + điểm thưởng, ô tìm kiếm, lưới 12 dịch vụ, bản đồ khu vực làm việc, tin tức
+3. Bấm **Bảng giá** → tab nhóm dịch vụ, giá tham khảo màu xanh, ghi chú
+4. Bấm **Điện lạnh** (hoặc tab Dịch vụ) → danh sách 443 dịch vụ, tìm kiếm không dấu
+5. Chọn 1 dịch vụ → **Đặt lịch nhanh chóng** (form giống app gốc) → *Đặt lịch ngay*
+6. **Thành công** → *Xem lịch hẹn* → tiến trình Đã đặt → Đã xác nhận (tự chuyển sau 6s) → Đã làm
+7. Tab **Lịch sử** → *Đã đặt* / *Đã làm* với badge **Còn/Hết bảo hành**
+8. Tài khoản → **Chương trình thành viên** (Vàng → Kim Cương), Tin tức
 
-## Learn more
+Hỗ trợ **dark mode** theo hệ thống.
 
-To learn more about developing your project with Expo, look at the following resources:
+## Cấu trúc
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+```
+src/
+├── app/                # màn hình (expo-router)
+│   ├── (tabs)/         # Trang chủ · Dịch vụ · Lịch sử · Tài khoản
+│   ├── pricing/[id]    # Bảng giá theo nhóm
+│   ├── booking/        # Đặt lịch, thành công
+│   ├── order/[id]      # Chi tiết lịch hẹn / bảo hành
+│   ├── member, news, login
+├── components/         # ui.tsx (Text, Button, Header…), cards.tsx (CategoryTile, PriceRow, OrderCard, WorkAreaMap)
+├── data/               # mock: danh mục, 60+ dịch vụ, bảng giá, tin tức, thành viên
+├── store/              # zustand: auth, form đặt lịch, lịch sử đơn
+└── theme/              # màu vàng Thợ Việt, font Quicksand, spacing
+reference/              # 6 screenshot gốc từ App Store để đối chiếu
+```
