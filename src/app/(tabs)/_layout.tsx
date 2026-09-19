@@ -1,10 +1,11 @@
 import { Tabs } from 'expo-router';
-import { Platform } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Home, History, PenSquare, CircleUserRound } from 'lucide-react-native';
-import { useTheme, font } from '@/theme';
+import { useTheme, font, TAB_BAR_BASE } from '@/theme';
 
 export default function TabLayout() {
   const t = useTheme();
+  const insets = useSafeAreaInsets();
   return (
     <Tabs
       screenOptions={{
@@ -12,7 +13,7 @@ export default function TabLayout() {
         tabBarActiveTintColor: t.primaryText,
         tabBarInactiveTintColor: t.textMute,
         tabBarLabelStyle: { fontFamily: font.bold, fontSize: 12, marginTop: 2 },
-        tabBarStyle: { backgroundColor: t.tabBar, borderTopColor: t.border, height: Platform.OS === 'ios' ? 86 : 66, paddingTop: 8 },
+        tabBarStyle: { backgroundColor: t.tabBar, borderTopColor: t.border, height: TAB_BAR_BASE + insets.bottom, paddingTop: 8 },
         sceneStyle: { backgroundColor: t.bg },
       }}>
       <Tabs.Screen name="index" options={{ title: 'Trang chủ', tabBarIcon: ({ color, focused }) => <Home size={26} color={color} strokeWidth={focused ? 2.4 : 2} fill={focused ? color : 'transparent'} /> }} />

@@ -60,6 +60,8 @@ export function useTheme(): Theme & { isDark: boolean } {
 
 export const radius = { sm: 8, md: 12, lg: 16, xl: 22, full: 999 };
 export const space = { xs: 4, sm: 8, md: 12, lg: 16, xl: 20, xxl: 28 };
+/** Chiều cao tab bar chưa tính safe area dưới (icon 26 + label 12 + padding) */
+export const TAB_BAR_BASE = 64;
 
 export const font = {
   regular: 'Quicksand_400Regular',

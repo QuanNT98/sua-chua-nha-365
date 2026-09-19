@@ -6,7 +6,7 @@ import Reanimated, { useSharedValue, useAnimatedStyle, withRepeat, withSequence,
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Text, Tap, Row } from './ui';
-import { useTheme, radius, space, shadow } from '@/theme';
+import { useTheme, radius, space, shadow, TAB_BAR_BASE } from '@/theme';
 import type { Promo, Trade, News } from '@/data';
 
 const { width: W } = Dimensions.get('window');
@@ -204,9 +204,9 @@ export function FloatingDiscount({ onPress, bottom }: { onPress: () => void; bot
     pulse.value = withRepeat(withSequence(withTiming(1.06, { duration: 700 }), withTiming(1, { duration: 700 })), -1, false);
   }, []);
 
-  // sticker được đặt ở right:10 / bottom:`bottom`; giới hạn kéo theo kích thước màn hình (trừ tab bar ~86 + safe area)
+  // sticker được đặt ở right:10 / bottom:`bottom`; giới hạn kéo theo kích thước màn hình (trừ tab bar + safe area)
   const minX = -(sw - STICKER_W - 20);
-  const minY = -(sh - STICKER_H - bottom - insets.top - 86 - 10);
+  const minY = -(sh - STICKER_H - bottom - insets.top - (TAB_BAR_BASE + insets.bottom) - 10);
   const clamp = (v: number, lo: number, hi: number) => {
     'worklet';
     return Math.min(hi, Math.max(lo, v));
