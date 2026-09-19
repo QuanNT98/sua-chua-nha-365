@@ -1,11 +1,11 @@
 {
   "expo": {
     "name": "Sửa chữa nhà 365",
-    "slug": "tho-viet-demo",
+    "slug": "sua-chua-nha-365",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "thoviet",
+    "scheme": "suachuanha365",
     "userInterfaceStyle": "automatic",
     "ios": {
       "icon": "./assets/expo.icon"
@@ -41,7 +41,7 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "e13e3f5c-5b81-48d9-b45a-b2903b58eb71"
+        "projectId": "e25e7d6b-34b5-4486-b709-a6d1b8710bed"
       }
     },
     "owner": "quannguyen98",
@@ -49,7 +49,7 @@
       "policy": "sdkVersion"
     },
     "updates": {
-      "url": "https://u.expo.dev/e13e3f5c-5b81-48d9-b45a-b2903b58eb71",
+      "url": "https://u.expo.dev/e25e7d6b-34b5-4486-b709-a6d1b8710bed",
       "fallbackToCacheTimeout": 0
     }
   }

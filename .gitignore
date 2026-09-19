@@ -45,3 +45,4 @@ example
 # IDE / local
 .vscode/
 .claude/
+demo/*.apk
