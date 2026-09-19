@@ -100,7 +100,7 @@ export default function BookingScreen() {
           ))}
         </View>
         <Text size={12.5} tone="sub" style={{ marginTop: 12, lineHeight: 18, fontStyle: 'italic' }}>
-          Sau khi đặt lịch, tổng đài Thợ Việt sẽ gọi xác nhận trong 5–10 phút. Giảm 50K khi đặt lịch trên ứng dụng.
+          Sau khi đặt lịch, tổng đài Sửa chữa nhà 365 sẽ gọi xác nhận trong 5–10 phút. Giảm 50K khi đặt lịch trên ứng dụng.
         </Text>
       </ScrollView>
 

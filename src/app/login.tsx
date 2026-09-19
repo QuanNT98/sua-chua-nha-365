@@ -48,7 +48,7 @@ export default function Login() {
           </Text>
         </View>
         <Text weight="bold" size={26} style={{ marginTop: 12 }}>
-          Thợ Việt
+          Sửa chữa nhà 365
         </Text>
         <Text weight="semibold" size={13} tone="sub" style={{ letterSpacing: 1 }}>
           TÍN · TRÍ · TỐC · TINH · TÂM
@@ -85,7 +85,7 @@ export default function Login() {
             </View>
             <Button title="Nhận mã OTP" disabled={phone.length < 9} onPress={() => setStep('otp')} style={{ marginTop: 22 }} />
             <Text size={12} tone="mute" style={{ marginTop: 16, textAlign: 'center', lineHeight: 18 }}>
-              Bằng việc tiếp tục, bạn đồng ý với <Text size={12} tone="primary" weight="semibold">Chính sách phục vụ khách hàng</Text> của Thợ Việt.
+              Bằng việc tiếp tục, bạn đồng ý với <Text size={12} tone="primary" weight="semibold">Chính sách phục vụ khách hàng</Text> của Sửa chữa nhà 365.
             </Text>
           </Animated.View>
         ) : (

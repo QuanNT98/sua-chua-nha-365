@@ -24,7 +24,7 @@ export function DemoGate({ children }: { children: React.ReactNode }) {
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 6 }}>
         <Phone size={14} color={t.textMute} />
         <Text size={13} tone="mute">
-          Thợ Việt Demo · v1.0
+          Sửa chữa nhà 365 Demo · v1.0
         </Text>
       </View>
     </View>

@@ -34,7 +34,7 @@ export default function Success() {
             <Row style={{ gap: 10 }}>
               <PhoneCall size={18} color={t.primary} />
               <Text weight="semibold" size={14} style={{ flex: 1, lineHeight: 20 }}>
-                Tổng đài Thợ Việt sẽ gọi số {order.phone} để xác nhận trong 5–10 phút.
+                Tổng đài Sửa chữa nhà 365 sẽ gọi số {order.phone} để xác nhận trong 5–10 phút.
               </Text>
             </Row>
             <Row style={{ justifyContent: 'space-between' }}>

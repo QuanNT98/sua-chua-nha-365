@@ -94,7 +94,7 @@ export default function HomeScreen() {
             TÍN · TRÍ · TỐC · TINH · TÂM
           </Text>
           <Text size={11} tone="mute">
-            Thợ Việt © 2026 · thợ của mọi nhà
+            Sửa chữa nhà 365 © 2026 · thợ của mọi nhà
           </Text>
         </View>
       </ScrollView>

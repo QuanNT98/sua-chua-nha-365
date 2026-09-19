@@ -30,7 +30,7 @@ export function CategoryTile({ item }: { item: Category }) {
   );
 }
 
-/* Dòng dịch vụ trong danh sách "Dịch vụ Thợ Việt" */
+/* Dòng dịch vụ trong danh sách "Dịch vụ Sửa chữa nhà 365" */
 export function ServiceRow({ item, onPress }: { item: Service; onPress: () => void }) {
   const t = useTheme();
   return (

@@ -56,7 +56,7 @@ export default function ServicesScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: t.bg }}>
-      <Header title="Dịch vụ Thợ Việt" />
+      <Header title="Dịch vụ Sửa chữa nhà 365" />
       <View style={{ paddingHorizontal: space.lg, paddingBottom: 6 }}>
         <View style={[styles.search, { backgroundColor: t.card }, !t.isDark && shadow.card]}>
           <Search size={20} color={t.textSub} />

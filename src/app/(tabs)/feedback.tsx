@@ -35,14 +35,14 @@ export default function FeedbackScreen() {
               Cảm ơn góp ý của bạn!
             </Text>
             <Text size={14} tone="sub" style={{ textAlign: 'center', lineHeight: 22, maxWidth: 280 }}>
-              Thợ Việt sẽ phản hồi trong 24h. Mọi góp ý đều giúp chúng tôi phục vụ tốt hơn.
+              Sửa chữa nhà 365 sẽ phản hồi trong 24h. Mọi góp ý đều giúp chúng tôi phục vụ tốt hơn.
             </Text>
             <Button title="Gửi góp ý khác" variant="secondary" size="md" onPress={() => { setSent(false); setText(''); }} style={{ marginTop: 8 }} />
           </Animated.View>
         ) : (
           <>
             <Text weight="bold" size={17}>
-              Bạn hài lòng với Thợ Việt chứ?
+              Bạn hài lòng với Sửa chữa nhà 365 chứ?
             </Text>
             <Row style={{ justifyContent: 'center', gap: 10, marginTop: 16 }}>
               {[1, 2, 3, 4, 5].map((i) => (
@@ -96,7 +96,7 @@ export default function FeedbackScreen() {
                   Zalo OA
                 </Text>
                 <Text size={11} tone="sub">
-                  Thợ Việt
+                  Sửa chữa nhà 365
                 </Text>
               </Card>
             </Row>

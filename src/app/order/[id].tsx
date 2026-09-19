@@ -8,7 +8,7 @@ import { getCategory } from '@/data';
 import { useTheme, space, palette } from '@/theme';
 
 const steps: { key: OrderStatus; title: string; desc: string }[] = [
-  { key: 'booked', title: 'Đã đặt lịch', desc: 'Thợ Việt đã tiếp nhận yêu cầu của bạn' },
+  { key: 'booked', title: 'Đã đặt lịch', desc: 'Sửa chữa nhà 365 đã tiếp nhận yêu cầu của bạn' },
   { key: 'confirmed', title: 'Đã xác nhận', desc: 'Tổng đài đã gọi xác nhận, thợ sẽ đến đúng hẹn' },
   { key: 'done', title: 'Đã làm', desc: 'Công việc hoàn tất, bắt đầu tính bảo hành' },
 ];

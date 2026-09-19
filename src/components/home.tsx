@@ -94,7 +94,7 @@ export function PromoCarousel({ data, onPress }: { data: Promo[]; onPress: () =>
           </View>
           <View style={styles.logoTag}>
             <Text weight="bold" size={9} color="#15803D">
-              Thợ Việt
+              Sửa chữa nhà 365
             </Text>
           </View>
         </Tap>
@@ -125,7 +125,7 @@ export function TradeCarousel({ data, onPress }: { data: Trade[]; onPress: () =>
           <View style={{ alignItems: 'center', paddingTop: 16 }}>
             <View style={styles.logoCenter}>
               <Text weight="bold" size={10} color="#15803D">
-                Thợ Việt · thợ của mọi nhà
+                Sửa chữa nhà 365 · thợ của mọi nhà
               </Text>
             </View>
             <Text weight="bold" size={18} color={tr.accent} style={{ marginTop: 14, letterSpacing: 0.5 }}>

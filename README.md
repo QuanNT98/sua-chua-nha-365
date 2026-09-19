@@ -1,4 +1,4 @@
-# Thợ Việt – Demo UI/UX (React Native / Expo)
+# Sửa chữa nhà 365 – Demo UI/UX (React Native / Expo)
 
 Bản clone giao diện app **Thợ Việt – Đặt Thợ Nhanh** (bám sát app gốc trên App Store,
 xem ảnh tham chiếu trong `reference/`). Không có backend: toàn bộ dữ liệu là mock trong `src/data`.
@@ -39,6 +39,6 @@ src/
 ├── components/         # ui.tsx (Text, Button, Header…), cards.tsx (CategoryTile, PriceRow, OrderCard, WorkAreaMap)
 ├── data/               # mock: danh mục, 60+ dịch vụ, bảng giá, tin tức, thành viên
 ├── store/              # zustand: auth, form đặt lịch, lịch sử đơn
-└── theme/              # màu vàng Thợ Việt, font Quicksand, spacing
+└── theme/              # màu vàng chủ đạo, font Quicksand, spacing
 reference/              # 6 screenshot gốc từ App Store để đối chiếu
 ```
