@@ -16,7 +16,7 @@ export default function Login() {
   const signIn = useStore((s) => s.signIn);
   const tryNow = useStore((s) => s.tryNow);
   const [step, setStep] = useState<'phone' | 'password'>('phone');
-  const [phone, setPhone] = useState('0968409323');
+  const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState<'sign-in' | 'try-now' | null>(null);
   const [error, setError] = useState('');
