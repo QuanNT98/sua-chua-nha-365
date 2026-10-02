@@ -3,8 +3,8 @@ import { View, FlatList, ScrollView, StyleSheet } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Text, Header, Screen, Tap, Chip } from '@/components/ui';
 import { PriceRow } from '@/components/cards';
-import { priceLists, getPriceList, getCategory } from '@/data';
 import { useStore } from '@/store';
+import { useCatalog } from '@/store/catalog';
 import { useTheme, space } from '@/theme';
 
 export default function PricingScreen() {
@@ -12,6 +12,10 @@ export default function PricingScreen() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const startDraft = useStore((s) => s.startDraft);
+  const priceLists = useCatalog((s) => s.priceLists);
+  const categories = useCatalog((s) => s.categories);
+  const getCategory = (categoryId: string) => categories.find((c) => c.id === categoryId);
+  const getPriceList = (categoryId: string) => priceLists.find((p) => p.categoryId === categoryId);
   const [catId, setCatId] = useState(id);
   const list = getPriceList(catId) ?? priceLists[0];
   const [group, setGroup] = useState(list.groups[0].id);
@@ -26,7 +30,7 @@ export default function PricingScreen() {
       <View>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: space.lg, gap: 8, paddingBottom: 6 }}>
           {priceLists.map((p) => (
-            <Chip key={p.categoryId} label={getCategory(p.categoryId)!.name.replace('\n', ' ')} active={p.categoryId === list.categoryId} onPress={() => setCatId(p.categoryId)} />
+            <Chip key={p.categoryId} label={(getCategory(p.categoryId)?.name ?? p.categoryId).replace('\n', ' ')} active={p.categoryId === list.categoryId} onPress={() => setCatId(p.categoryId)} />
           ))}
         </ScrollView>
       </View>

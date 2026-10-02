@@ -23,7 +23,8 @@ export function CategoryTile({ item }: { item: Category }) {
           {item.emoji}
         </Text>
       </View>
-      <Text weight="semibold" size={12.5} style={{ textAlign: 'center', marginTop: 6, lineHeight: 17 }}>
+      {/* Full width: a shrink-to-fit label loses its last word on Android when the tile re-renders. */}
+      <Text weight="semibold" size={12.5} style={{ alignSelf: 'stretch', textAlign: 'center', marginTop: 6, lineHeight: 17 }}>
         {item.name}
       </Text>
     </Tap>

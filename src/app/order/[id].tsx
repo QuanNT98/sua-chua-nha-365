@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Check, MapPin, Calendar, Phone, User, ShieldCheck, FileText, Clock } from 'lucide-react-native';
 import { Text, Header, Screen, Card, Row, Button, Divider, Badge } from '@/components/ui';
 import { useStore, statusLabel, warrantyActive, type OrderStatus } from '@/store';
-import { getCategory } from '@/data';
+import { useCategory } from '@/store/catalog';
 import { useTheme, space, palette } from '@/theme';
 
 const steps: { key: OrderStatus; title: string; desc: string }[] = [
@@ -20,9 +20,9 @@ export default function OrderDetail() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const order = useStore((s) => s.orders.find((o) => o.id === id));
   const startDraft = useStore((s) => s.startDraft);
+  const cat = useCategory(order?.categoryId);
   if (!order) return null;
   const current = steps.findIndex((s) => s.key === order.status);
-  const cat = getCategory(order.categoryId);
   const done = order.status === 'done';
   const active = done && warrantyActive(order);
 

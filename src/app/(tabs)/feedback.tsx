@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { View, ScrollView, TextInput, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, ScrollView, TextInput, StyleSheet, KeyboardAvoidingView, Platform, Alert } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Star, Phone, MessageCircle, Check } from 'lucide-react-native';
 import Animated, { FadeIn, ZoomIn } from 'react-native-reanimated';
 import { Text, Button, Chip, Tap, Card, Row } from '@/components/ui';
+import { useStore } from '@/store';
 import { useTheme, space, radius, font, palette } from '@/theme';
 
 const topics = ['Chất lượng thợ', 'Giá cả', 'Thời gian', 'Ứng dụng', 'Tổng đài', 'Khác'];
@@ -17,6 +18,20 @@ export default function FeedbackScreen() {
   const [topic, setTopic] = useState('Chất lượng thợ');
   const [text, setText] = useState('');
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const sendFeedback = useStore((s) => s.sendFeedback);
+
+  const send = async () => {
+    setSending(true);
+    try {
+      await sendFeedback({ stars, topic, content: text.trim() });
+      setSent(true);
+    } catch (e) {
+      Alert.alert('Chưa gửi được góp ý', `${e instanceof Error ? e.message : String(e)}\nVui lòng kiểm tra kết nối và thử lại.`);
+    } finally {
+      setSending(false);
+    }
+  };
 
   return (
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1, backgroundColor: t.bg }}>
@@ -75,7 +90,7 @@ export default function FeedbackScreen() {
               placeholderTextColor={t.textMute}
               style={[styles.input, { backgroundColor: t.card, borderColor: t.border, color: t.text, fontFamily: font.medium }]}
             />
-            <Button title="Gửi góp ý" disabled={!text.trim()} onPress={() => setSent(true)} style={{ marginTop: 20 }} />
+            <Button title="Gửi góp ý" loading={sending} disabled={!text.trim()} onPress={send} style={{ marginTop: 20 }} />
 
             <Text weight="bold" size={15} style={{ marginTop: 30, marginBottom: 10 }}>
               Hoặc liên hệ trực tiếp

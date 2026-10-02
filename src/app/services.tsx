@@ -4,8 +4,9 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Search, X } from 'lucide-react-native';
 import { Text, Chip, Tap, Row, Header } from '@/components/ui';
 import { ServiceRow } from '@/components/cards';
-import { services, serviceCategories, searchHints } from '@/data';
+import { searchHints } from '@/data';
 import { useStore } from '@/store';
+import { useCatalog } from '@/store/catalog';
 import { useTheme, space, radius, font, shadow } from '@/theme';
 
 const norm = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd').toLowerCase();
@@ -15,6 +16,9 @@ export default function ServicesScreen() {
   const router = useRouter();
   const { cat, focus } = useLocalSearchParams<{ cat?: string; focus?: string }>();
   const startDraft = useStore((s) => s.startDraft);
+  const services = useCatalog((s) => s.services);
+  const categories = useCatalog((s) => s.categories);
+  const serviceCategories = useMemo(() => categories.filter((c) => c.kind === 'service' || c.kind === 'other'), [categories]);
   const [q, setQ] = useState('');
   const [active, setActive] = useState<string>('all');
   const inputRef = useRef<TextInput>(null);
@@ -47,7 +51,7 @@ export default function ServicesScreen() {
     let out = active === 'all' ? services : services.filter((s) => s.categoryId === active);
     if (q.trim()) out = out.filter((s) => norm(s.name).includes(norm(q)));
     return out;
-  }, [active, q]);
+  }, [active, q, services]);
 
   const book = (title: string, categoryId: string) => {
     startDraft(title, categoryId);

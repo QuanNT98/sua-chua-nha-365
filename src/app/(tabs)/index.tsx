@@ -6,8 +6,8 @@ import { Search, CircleDollarSign } from 'lucide-react-native';
 import { Text, Tap, Row } from '@/components/ui';
 import { CategoryTile, WorkAreaMap } from '@/components/cards';
 import { PromoCarousel, TradeCarousel, ArticleList, FloatingDiscount } from '@/components/home';
-import { categories, user, promos, trades, news } from '@/data';
-import { useStore } from '@/store';
+import { useStore, displayName } from '@/store';
+import { useCatalog } from '@/store/catalog';
 import { useTheme, space, radius, shadow } from '@/theme';
 
 function SectionTitle({ title, action, onAction }: { title: string; action?: string; onAction?: () => void }) {
@@ -32,6 +32,8 @@ export default function HomeScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const startDraft = useStore((s) => s.startDraft);
+  const profile = useStore((s) => s.profile);
+  const { categories, promos, trades, news } = useCatalog();
   const bookNow = () => {
     startDraft('', 'khac');
     router.push('/booking');
@@ -44,14 +46,14 @@ export default function HomeScreen() {
         <LinearGradient colors={[t.headerTop, t.headerBottom]} style={{ paddingTop: insets.top + 10, paddingBottom: 6, paddingHorizontal: space.lg }}>
           <Row style={{ justifyContent: 'space-between' }}>
             <Text size={17}>
-              Xin chào, <Text weight="bold" size={17}>{user.name}</Text> 👋
+              Xin chào, <Text weight="bold" size={17}>{displayName(profile)}</Text> 👋
             </Text>
             <Tap onPress={() => router.push('/member')} style={styles.points}>
               <View style={styles.coin}>
                 <CircleDollarSign size={14} color="#fff" />
               </View>
               <Text weight="bold" size={13} color="#fff">
-                {user.points.toLocaleString('vi-VN')} điểm
+                {profile.points.toLocaleString('vi-VN')} điểm
               </Text>
             </Tap>
           </Row>

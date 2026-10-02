@@ -4,12 +4,13 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Clock } from 'lucide-react-native';
 import { useRouter } from 'expo-router';
 import { Text, Header, Screen, Tap, Row } from '@/components/ui';
-import { news } from '@/data';
+import { useCatalog } from '@/store/catalog';
 import { useTheme, space, radius, shadow } from '@/theme';
 
 export default function NewsScreen() {
   const t = useTheme();
   const router = useRouter();
+  const news = useCatalog((s) => s.news);
   const [featured, ...rest] = news;
   return (
     <Screen>

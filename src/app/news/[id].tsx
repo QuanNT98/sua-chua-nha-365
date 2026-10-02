@@ -5,8 +5,8 @@ import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ChevronLeft, Share2, Clock, User, ChevronRight } from 'lucide-react-native';
 import { Text, Tap, Row, Button, Divider } from '@/components/ui';
-import { news } from '@/data';
 import { useStore } from '@/store';
+import { useCatalog } from '@/store/catalog';
 import { useTheme, space, radius, shadow } from '@/theme';
 
 const { width } = Dimensions.get('window');
@@ -17,6 +17,7 @@ export default function NewsDetail() {
   const insets = useSafeAreaInsets();
   const { id } = useLocalSearchParams<{ id: string }>();
   const startDraft = useStore((s) => s.startDraft);
+  const news = useCatalog((s) => s.news);
   const item = news.find((n) => n.id === id) ?? news[0];
   const related = news.filter((n) => n.id !== item.id).slice(0, 3);
 

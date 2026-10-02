@@ -1,13 +1,18 @@
 import { View, ScrollView, StyleSheet } from 'react-native';
 import { ArrowUpCircle, Crown, AlertCircle, Percent, Clock, Headphones, Gift, Check } from 'lucide-react-native';
 import { Text, Header, Screen, Card, Row } from '@/components/ui';
-import { user, memberBenefits, memberTiers } from '@/data';
+import { memberBenefits } from '@/data';
+import { useStore } from '@/store';
+import { useCatalog, tierInfo } from '@/store/catalog';
 import { useTheme, space, radius, formatVND } from '@/theme';
 
 const icons: Record<string, any> = { percent: Percent, clock: Clock, headphones: Headphones, gift: Gift };
 
 export default function MemberScreen() {
   const t = useTheme();
+  const points = useStore((s) => s.profile.points);
+  const memberTiers = useCatalog((s) => s.memberTiers);
+  const user = { points, ...tierInfo(points, memberTiers) };
   const need = user.nextTierAt - user.points;
   const pct = Math.min(100, Math.round((user.points / user.nextTierAt) * 100));
   return (

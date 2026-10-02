@@ -4,8 +4,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Crown, MapPin, ShieldCheck, CircleDollarSign, Newspaper, Phone, FileText, ChevronRight, LogOut, Pencil, Moon } from 'lucide-react-native';
 import { Text, Row, Card, Tap, Divider } from '@/components/ui';
-import { user } from '@/data';
-import { useStore } from '@/store';
+import { useStore, displayName } from '@/store';
+import { useCatalog, tierInfo } from '@/store/catalog';
 import { useTheme, space, radius, palette } from '@/theme';
 
 export default function ProfileScreen() {
@@ -14,6 +14,15 @@ export default function ProfileScreen() {
   const insets = useSafeAreaInsets();
   const logout = useStore((s) => s.logout);
   const orders = useStore((s) => s.orders);
+  const profile = useStore((s) => s.profile);
+  const memberTiers = useCatalog((s) => s.memberTiers);
+  const user = {
+    name: displayName(profile),
+    phone: profile.phone,
+    points: profile.points,
+    tier: tierInfo(profile.points, memberTiers).tier,
+    address: profile.address || 'Chưa có địa chỉ',
+  };
 
   const groups = [
     {
@@ -28,7 +37,7 @@ export default function ProfileScreen() {
     {
       title: 'Tài khoản',
       items: [
-        { icon: MapPin, label: 'Địa chỉ', sub: user.address, color: '#E5484D' },
+        { icon: MapPin, label: 'Địa chỉ', sub: user.address, color: '#E5484D', to: '/profile-edit' },
         { icon: Moon, label: 'Giao diện', sub: 'Theo hệ thống', color: '#64748B' },
       ],
     },
@@ -67,7 +76,7 @@ export default function ProfileScreen() {
               </Text>
             </Row>
           </View>
-          <Tap style={[styles.edit, { backgroundColor: t.cardAlt }]}>
+          <Tap onPress={() => router.push('/profile-edit')} style={[styles.edit, { backgroundColor: t.cardAlt }]}>
             <Pencil size={16} color={t.text} />
           </Tap>
         </Card>
