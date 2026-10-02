@@ -14,7 +14,20 @@ export default function HistoryScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const orders = useStore((s) => s.orders);
+  const loadOrders = useStore((s) => s.loadOrders);
   const [tab, setTab] = useState<'booked' | 'done'>('booked');
+  const [refreshing, setRefreshing] = useState(false);
+
+  const refresh = async () => {
+    setRefreshing(true);
+    try {
+      await loadOrders();
+    } catch {
+      // Keep the list on screen; the next pull retries.
+    } finally {
+      setRefreshing(false);
+    }
+  };
   const list = orders.filter((o) => (tab === 'done' ? o.status === 'done' : o.status !== 'done'));
 
   return (
@@ -42,6 +55,8 @@ export default function HistoryScreen() {
       <FlatList
         data={list}
         keyExtractor={(o) => o.id}
+        refreshing={refreshing}
+        onRefresh={refresh}
         contentContainerStyle={{ paddingTop: 14, paddingBottom: 32, flexGrow: 1 }}
         renderItem={({ item }) => <OrderCard item={item} onPress={() => router.push(`/order/${item.id}`)} />}
         ListEmptyComponent={

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { View, ScrollView, TextInput, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, ScrollView, TextInput, StyleSheet, KeyboardAvoidingView, Platform, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Search, Check } from 'lucide-react-native';
@@ -34,12 +34,15 @@ export default function BookingScreen() {
   const inputStyle = [styles.input, { backgroundColor: t.card, borderColor: t.border, color: t.text, fontFamily: font.medium }];
   const valid = draft.title.trim() && draft.address.trim() && draft.phone.length >= 9 && draft.name.trim();
 
-  const submit = () => {
+  const submit = async () => {
     setLoading(true);
-    setTimeout(() => {
-      const o = placeOrder();
+    try {
+      const o = await placeOrder();
       router.replace(`/booking/success?id=${o.id}`);
-    }, 800);
+    } catch (e) {
+      setLoading(false);
+      Alert.alert('Chưa đặt được lịch', `${e instanceof Error ? e.message : String(e)}\nVui lòng kiểm tra kết nối và thử lại.`);
+    }
   };
 
   return (

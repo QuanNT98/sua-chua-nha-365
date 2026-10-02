@@ -1,4 +1,8 @@
 import { create } from 'zustand';
+import { authenticate, joinDatabase, logoutServer, type AuthSession } from '@/services/api';
+import { INKA, ordersOnServer } from '@/services/config';
+import { createOrder, listOrders, saveOrder } from '@/services/orders';
+import { getStoredUserId, getStoredUsername, setStoredSession } from '@/services/storage';
 
 export type OrderStatus = 'booked' | 'confirmed' | 'done';
 
@@ -38,14 +42,22 @@ export type Draft = {
 };
 
 type State = {
+  /** Session restored from storage; screens wait for it before routing. */
+  ready: boolean;
   loggedIn: boolean;
+  session: AuthSession | null;
   orders: Order[];
+  ordersLoading: boolean;
   draft: Draft;
-  login: () => void;
-  logout: () => void;
+  restore: () => Promise<void>;
+  /** Signs in with phone + password; an unknown phone gets a new account. */
+  signIn: (phone: string, password: string) => Promise<void>;
+  tryNow: () => Promise<void>;
+  logout: () => Promise<void>;
+  loadOrders: () => Promise<void>;
   setDraft: (p: Partial<Draft>) => void;
   startDraft: (title: string, categoryId: string) => void;
-  placeOrder: () => Order;
+  placeOrder: () => Promise<Order>;
   confirm: (id: string) => void;
 };
 
@@ -79,38 +91,113 @@ const defaultDraft: Draft = {
   time: '09:00',
 };
 
-export const useStore = create<State>((set, get) => ({
-  loggedIn: false,
-  orders: seed,
-  draft: defaultDraft,
-  login: () => set({ loggedIn: true }),
-  logout: () => set({ loggedIn: false }),
-  setDraft: (p) => set((s) => ({ draft: { ...s.draft, ...p } })),
-  startDraft: (title, categoryId) => set({ draft: { ...defaultDraft, date: fmt(new Date()), title, categoryId } }),
-  placeOrder: () => {
-    const d = get().draft;
-    const now = new Date();
-    const code = `${String(now.getFullYear()).slice(2)}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}${String(now.getTime()).slice(-6)}`;
-    const order: Order = {
-      id: `o-${now.getTime()}`,
-      code,
-      title: d.title,
-      categoryId: d.categoryId,
-      address: d.address,
-      date: d.date,
-      time: d.time,
-      phone: d.phone,
-      name: d.name,
-      note: d.note,
-      consultFirst: d.consultFirst,
-      status: 'booked',
-      warrantyMonths: 3,
-      createdAt: now.getTime(),
-    };
-    set((s) => ({ orders: [order, ...s.orders] }));
-    // Demo: tổng đài "gọi xác nhận" sau vài giây
-    setTimeout(() => get().confirm(order.id), 6000);
-    return order;
-  },
-  confirm: (id) => set((s) => ({ orders: s.orders.map((o) => (o.id === id && o.status === 'booked' ? { ...o, status: 'confirmed' } : o)) })),
-}));
+/** Server error codes → messages for the login form. */
+const AUTH_ERRORS: Record<string, string> = {
+  wrong_password: 'Sai mật khẩu',
+  user_exists: 'Số điện thoại đã được đăng ký',
+  forbidden: 'Tài khoản không có quyền truy cập',
+};
+export const authErrorText = (e: unknown) => {
+  const msg = e instanceof Error ? e.message : String(e);
+  return AUTH_ERRORS[msg] ?? msg;
+};
+
+export const useStore = create<State>((set, get) => {
+  /** Signed in with a server session: orders come from (and go to) inka. */
+  const onServer = () => ordersOnServer() && get().session !== null;
+
+  const startSession = async (session: AuthSession) => {
+    // Already a member → the server just answers again; a failure shows up later as a failed order.
+    if (ordersOnServer() && INKA.joinOnSignIn) await joinDatabase(INKA.dbId).catch(() => null);
+    await setStoredSession(session);
+    set({ session, loggedIn: true, orders: ordersOnServer() ? [] : seed });
+    get().loadOrders().catch(() => {});
+  };
+
+  return {
+    ready: false,
+    loggedIn: false,
+    session: null,
+    orders: seed,
+    ordersLoading: false,
+    draft: defaultDraft,
+
+    restore: async () => {
+      const [userId, username] = await Promise.all([getStoredUserId(), getStoredUsername()]);
+      if (userId) {
+        set({ session: { userId, username: username ?? userId }, loggedIn: true, orders: ordersOnServer() ? [] : seed });
+        get().loadOrders().catch(() => {});
+      }
+      set({ ready: true });
+    },
+
+    signIn: async (phone, password) => {
+      let session: AuthSession;
+      try {
+        session = await authenticate('sign-in', { username: phone, password });
+      } catch (e) {
+        if (!(e instanceof Error) || e.message !== 'user_not_found') throw e;
+        session = await authenticate('sign-up', { username: phone, password });
+      }
+      await startSession(session);
+    },
+
+    tryNow: async () => startSession(await authenticate('try-now')),
+
+    logout: async () => {
+      set({ session: null, loggedIn: false, orders: seed });
+      await setStoredSession(null);
+      await logoutServer();
+    },
+
+    loadOrders: async () => {
+      const session = get().session;
+      if (!onServer() || !session) return;
+      set({ ordersLoading: true });
+      try {
+        set({ orders: await listOrders(session.userId) });
+      } finally {
+        set({ ordersLoading: false });
+      }
+    },
+
+    setDraft: (p) => set((s) => ({ draft: { ...s.draft, ...p } })),
+    startDraft: (title, categoryId) => set({ draft: { ...defaultDraft, date: fmt(new Date()), title, categoryId } }),
+
+    placeOrder: async () => {
+      const d = get().draft;
+      const now = new Date();
+      const code = `${String(now.getFullYear()).slice(2)}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}${String(now.getTime()).slice(-6)}`;
+      const fields: Omit<Order, 'id'> = {
+        code,
+        title: d.title,
+        categoryId: d.categoryId,
+        address: d.address,
+        date: d.date,
+        time: d.time,
+        phone: d.phone,
+        name: d.name,
+        note: d.note,
+        consultFirst: d.consultFirst,
+        status: 'booked',
+        warrantyMonths: 3,
+        createdAt: now.getTime(),
+      };
+      const session = get().session;
+      const order = onServer() && session ? await createOrder(session.userId, fields) : { ...fields, id: `o-${now.getTime()}` };
+      set((s) => ({ orders: [order, ...s.orders] }));
+      // Demo: tổng đài "gọi xác nhận" sau vài giây
+      setTimeout(() => get().confirm(order.id), 6000);
+      return order;
+    },
+
+    confirm: (id) => {
+      const order = get().orders.find((o) => o.id === id && o.status === 'booked');
+      if (!order) return;
+      const confirmed: Order = { ...order, status: 'confirmed' };
+      set((s) => ({ orders: s.orders.map((o) => (o.id === id ? confirmed : o)) }));
+      const session = get().session;
+      if (onServer() && session) saveOrder(session.userId, confirmed).catch(() => {});
+    },
+  };
+});

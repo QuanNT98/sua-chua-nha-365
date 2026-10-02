@@ -104,7 +104,7 @@ export default function ProfileScreen() {
 
       <Tap
         onPress={() => {
-          logout();
+          void logout();
           router.replace('/login');
         }}
         scale={false}
